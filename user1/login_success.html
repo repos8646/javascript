@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>success</title>
+    <script>
+
+        window.onload = function(){
+
+            // 서버로 토큰 전송
+            const accessToken = localStorage.getItem('accessToken');
+
+            fetch('http://127.0.0.1:8080/ch10/user', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
+                .then(resp => resp.json())
+                .then(data => {
+                    console.log(data);
+                    document.querySelector('span#uid').textContent = data.uid;
+                    document.querySelector('span#name').textContent = data.name;
+                    document.querySelector('span#birth').textContent = data.birth;
+                    document.querySelector('span#rdate').textContent = data.rdate ? new Date(data.rdate).toLocaleDateString() : '가입일 정보 없음'; 
+                    document.querySelector('span#role').textContent = data.role;
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+
+                const logout = document.getElementById('logout');
+                logout.onclick = function(){
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('refreshToken');
+
+                    location.href = './login.html';
+                }
+
+
+        }
+    </script>
+</head>
+<body>
+    
+    <p>
+        아이디 : <span id="uid">a101</span><br>
+        이름 : <span id="name">홍길동</span><br>
+        생년월일 : <span id="birth">1999-01-01</span><br>
+        휴대폰 : <span id=>010-1234-1001</span><br>
+        가입일 : <span id="rdate"></span><br>
+        권한 : <span id="role"></span><br>
+        <a href="#" id="logout">로그아웃</a>
+
+    </p>
+</body>
+</html>
